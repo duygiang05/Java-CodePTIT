@@ -12,72 +12,62 @@ import java.util.*;
 public class TinhLuong {
     public static void main(String[] args) {
         Scanner sc = new Scanner(System.in);
+        Map<String,String> mp = new HashMap<>();
         int m = Integer.parseInt(sc.nextLine());
-        List<Phongban> list = new ArrayList<>();
-        for(int i = 0 ;i < m; i ++) {
-            String s = sc.nextLine();
-            String t1= s.substring(0,2), t2 = s.substring(3).trim();
-            list.add(new Phongban(t1,t2));
+        for(int i = 0; i < m; i++) {
+            String s = sc.next(), ss = sc.nextLine().trim();
+            mp.put(s, ss);
         }
-        List<NhanVien> list2 = new ArrayList<>();
+        List<NhanVien> list = new ArrayList<>();
         int n = Integer.parseInt(sc.nextLine());
-        for(int i = 0 ;i < n; i++) {
-            String a = sc.nextLine(), b = sc.nextLine();
+        for(int i = 0;i < n; i++) {
+            String ma = sc.nextLine(), ten = sc.nextLine();
             long x = Long.parseLong(sc.nextLine()), y = Long.parseLong(sc.nextLine());
-            NhanVien tmp = new NhanVien (a,b,x,y);
-            for(Phongban k : list) {
-                if(a.substring(3).equals(k.ma)) {
-                    tmp.tenphong = k.tenphong;
-                }
-            }
-            list2.add(tmp);
+            NhanVien tmp = new NhanVien(ma,ten,x,y);
+            String tmp1 = mp.get(ma.substring(3));
+            tmp.phongban = tmp1;
+            list.add(tmp);
         }
-        for(NhanVien x : list2) {
+        for(NhanVien x : list) {
             System.out.println(x);
         }
     }
 }
-class Phongban{
-    String ma,tenphong;
-    Phongban(String a,String b) {
-        ma = a; tenphong = b;
-    }
-}
 class NhanVien {
-    String ma,ten,tenphong;
-    long luongcb,songaycong,heso,luong;
-    int t;
-    NhanVien (String a, String b, long x, long y ) {
-        ma = a; ten = b; luongcb = x; songaycong = y;
-        char z = ma.charAt(0); t = Integer.parseInt(ma.substring(1,3));
-        if(z == 'A') {
-            if(t >= 16) heso = 20;
-            else if(t >= 9) heso = 14;
-            else if(t >= 4) heso = 12;
-            else heso = 10;
+    String ma,ten,phongban;
+    long luongcoban,songaycong,heso,sonam,tong;
+    NhanVien (String a, String b, long k,long y) {
+        ma = a; ten = b;luongcoban = k; songaycong = y; 
+        sonam = Long.parseLong(ma.substring(1,3));
+        char x = ma.charAt(0);
+        if(sonam >= 16) {
+            if(x == 'A') heso = 20;
+            else if(x == 'B' ) heso = 16;
+            else if(x == 'C') heso = 14;
+            else heso = 13;
         }
-        else if(z == 'B') {
-            if(t >= 16) heso = 16;
-            else if(t >= 9) heso = 13;
-            else if(t >= 4) heso = 11;
-            else heso = 10;
+        else if(sonam >= 9) {
+            if(x == 'A') heso = 14;
+            else if(x == 'B' ) heso = 13;
+            else if(x == 'C') heso = 12;
+            else heso = 11;
         }
-        else if(z == 'C') {
-            if(t >= 16) heso = 14;
-            else if(t >= 9) heso = 12;
-            else if(t >= 4) heso = 10;
+        else if(sonam >= 4) {
+            if(x == 'A') heso = 12;
+            else if(x == 'B' ) heso = 11;
+            else if(x == 'C') heso = 10;
             else heso = 9;
         }
-        else {
-            if(t >= 16) heso = 13;
-            else if(t >= 9) heso = 11;
-            else if(t >= 4) heso = 9;
+        else{
+            if(x == 'A') heso = 10;
+            else if(x == 'B' ) heso = 10;
+            else if(x == 'C') heso = 9;
             else heso = 8;
         }
-        luong = luongcb * songaycong * heso * 1000;
+        tong = luongcoban * songaycong * heso * 1000;
     }
     @Override
     public String toString() {
-        return ma + " " + ten + " " + tenphong + " " + luong ;
+        return ma + " " + ten + " " + phongban + " "  +tong ; 
     }
 }
