@@ -1,57 +1,60 @@
-import java.util.*;
+/*
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
+ */
+package TinhTienDien;
 
+/**
+ *
+ * @author PC
+ */
+import java.util.*;
+import java.io.*;
 public class TinhTienDien {
-    public static void main(String[] args) {
-        Scanner sc = new Scanner(System.in);
+    public static void main(String[] args) throws FileNotFoundException {
+        Scanner sc = new Scanner(new File("KHACHHANG.in"));
         List<tiendien> list = new ArrayList<>();
-        int n = Integer.parseInt(sc.nextLine());
-        for(int i = 0; i < n; i++) {
-            String s = sc.nextLine();
-            long socu = Long.parseLong(sc.nextLine());
-            long somoi = Long.parseLong(sc.nextLine());
-            list.add(new tiendien(s, socu, somoi));
+        int n = sc.nextInt();
+        for(int i = 0;i < n; i++) {
+            sc.nextLine();
+            String ten = sc.nextLine(), loai = sc.next();
+            long sodau = sc.nextLong(), socuoi = sc.nextLong();
+            list.add(new tiendien(ten,loai,sodau,socuoi));
         }
-        
+        Collections.sort(list,new Comparator<tiendien>() {
+            public int compare(tiendien a,tiendien b) {
+                return Long.compare(b.tong, a.tong);
+            }
+        });
         for(tiendien x : list) {
             System.out.println(x);
         }
     }
 }
-
-class tiendien {
-    String ma, stt;
+class tiendien{
+    String ma,ten="",loai;
+    long sodau,socuoi,vat,vuotmuc,dinhmuc,tong,trongdm;
     public static int dem = 1;
-    long socu, somoi, heso, thanhtien, phutroi, tong;
-    
-    tiendien(String a, long x, long y) {
-        stt = String.format("KH%02d", dem++);
-        ma = a; 
-        socu = x; 
-        somoi = y;
-        
-        if(ma.equals("KD")) heso = 3;
-        else if(ma.equals("NN")) heso = 5;
-        else if(ma.equals("TT")) heso = 4;
-        else heso = 2;
-        
-        long diff = somoi - socu;
-        thanhtien = diff * heso * 550;
-        
-        // Tính phụ trội bằng công thức làm tròn thủ công
-        if(diff > 100) {
-            phutroi = thanhtien;
-        } else if(diff >= 50) {
-            // thanhtien * 35 / 100 để tránh số thực
-            phutroi = (thanhtien * 35 + 50) / 100; // Làm tròn
-        } else {
-            phutroi = 0;
+    tiendien(String a,String b, long c,long d) {
+        loai = b; sodau = c; socuoi = d;
+        if(loai.equals("A")) dinhmuc = 100;
+        else if(loai.equals("B")) dinhmuc = 500;
+        else dinhmuc = 200;
+        long sudung = socuoi - sodau;
+        trongdm = sudung * 450;
+        vuotmuc = (sudung - dinhmuc ) * 1000 ;
+        if(vuotmuc < 0) vuotmuc = 0;
+        vat = vuotmuc * 5 / 100;
+        tong = trongdm + vuotmuc + vat;
+        ma = String.format("KH%02d",dem++);
+        String [] tmp = a.trim().split("\\s+");
+        for(String x : tmp ) {
+            ten += x.substring(0,1).toUpperCase() + x.substring(1).toLowerCase() + " ";
         }
-        
-        tong = thanhtien + phutroi;
+        ten = ten.trim();
     }
-    
     @Override
     public String toString() {
-        return stt + " " + heso + " " + thanhtien + " " + phutroi + " " + tong;
+        return ma + " " + ten + " " + trongdm + " "  +vuotmuc + " " + vat +" " +tong; 
     }
 }
